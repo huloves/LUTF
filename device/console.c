@@ -50,6 +50,16 @@ void console_put_str(char* str)
     console_release();
 }
 
+/**
+ * console_put_char - 输出字符
+ * **/
+void console_put_char(char ch)
+{
+    console_acquire();
+    write(STDOUT_FILENO, &ch, 1);
+    console_release();
+}
+
 void console_get_str(char* str)
 {
     console_acquire();
