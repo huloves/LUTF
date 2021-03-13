@@ -47,7 +47,7 @@ $(BUILD_DIR)/sync.o: task/sync.c include/sync.h \
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/console.o: device/console.c include/console.h \
-					include/sync.h include/task.h
+					include/sync.h include/task.h include/ioqueue.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/ioqueue.o: device/ioqueue.c include/ioqueue.h \
