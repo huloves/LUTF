@@ -51,7 +51,8 @@ $(BUILD_DIR)/console.o: device/console.c include/console.h \
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/ioqueue.o: device/ioqueue.c include/ioqueue.h \
-					include/analog_interrupt.h include/stdint.h include/debug.h include/assert.h
+					include/analog_interrupt.h include/stdint.h include/debug.h include/assert.h \
+					include/console.h
 	$(CC) $(CFLAGS) $< -o $@
 
 ###### 汇编文件 ######

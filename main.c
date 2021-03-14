@@ -46,6 +46,7 @@ int main()
     printf("0x%lx\n", test);
     printf("sizeof(long int) = %ld\n", sizeof(long int));
     console_init();
+    ioqueue_init(&buf);
     task_init();
     print_task_info(current_task);
     int a = 1;
@@ -58,8 +59,8 @@ int main()
     interrupt_enable();
     while(1) {
         sleep(1);
-        // printf("MMMMMMMM\n");
-        pause();
+        console_put_str("maiN ");
+        // pause();
     }
     return 0;
 }

@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include "debug.h"
 #include "assert.h"
+#include "console.h"
 #include <stdio.h>
 
 /*初始化io队列ioq*/
