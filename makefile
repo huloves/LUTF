@@ -22,7 +22,7 @@ $(BUILD_DIR)/assert.o: lib/assert.c include/assert.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/task.o: task/task.c include/task.h \
-					include/list.h include/assert.h include/bitmap.h include/debug.h
+					include/list.h include/assert.h include/bitmap.h include/debug.h include/sync.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/analog_interrupt.o: interrupt/analog_interrupt.c include/analog_interrupt.h \
