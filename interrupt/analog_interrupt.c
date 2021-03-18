@@ -10,6 +10,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+sigset_t block_set;
+
 static void signal_headler(int signal_num)
 {
 	unsigned long a = 0;
