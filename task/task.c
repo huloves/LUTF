@@ -152,7 +152,7 @@ void init_task(struct task_struct* ptask, char* name, int prio)
 {
     memset(ptask, 0, sizeof(*ptask));
     // ptask->tid = tid++;
-    ptask->tid = allocate_tid();
+    // ptask->tid = allocate_tid();
     strcpy(ptask->name, name);
 
     if(ptask == main_task) {
@@ -163,6 +163,7 @@ void init_task(struct task_struct* ptask, char* name, int prio)
         ptask->status = TASK_READY;
         ptask->first = true;
     }
+    ptask->tid = allocate_tid();
 
     //task_stack指向栈顶
     // uint8_t* stack_min_addr = (uint8_t*)malloc(TASK_STACK_SIZE);

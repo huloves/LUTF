@@ -41,6 +41,7 @@ void sema_down(struct semaphore* psema)
     //若value为1或被唤醒，会执行下面的代码，也就是获得了锁
     psema->value--;
     assert(psema->value == 0);
+    printf("LLLLLL\n");
     //恢复之前的中断状态
     interrupt_enable();
 }
@@ -64,8 +65,10 @@ void sema_up(struct semaphore* psema)
 void lock_acquire(struct lock* plock)
 {
     //排除曾经自己已经持有锁但还未将其释放的情况
+    // printf("%p %p\n", plock->holder, current_task);
     if(plock->holder != current_task) {
         sema_down(&plock->semaphore);   //对信号量P操作，原子操作
+        // printf("semaphore = %d\n", plock->semaphore);
         plock->holder = current_task;
         assert(plock->holder_repeat_nr == 0);
         plock->holder_repeat_nr = 1;
