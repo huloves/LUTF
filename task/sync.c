@@ -41,7 +41,6 @@ void sema_down(struct semaphore* psema)
     //若value为1或被唤醒，会执行下面的代码，也就是获得了锁
     psema->value--;
     assert(psema->value == 0);
-    printf("LLLLLL\n");
     //恢复之前的中断状态
     interrupt_enable();
 }
