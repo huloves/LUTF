@@ -10,6 +10,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+// sigset_t block_set;
+
 static void signal_headler(int signal_num)
 {
 	unsigned long a = 0;
@@ -33,7 +35,21 @@ void interrupt_enable()
 /**
  * interrupt_disable - shield interrupt
  * **/
-void interrupt_disable()
+sigset_t interrupt_disable()
 {
-	signal(SIGALRM, NULL);
+	// signal(SIGALRM, NULL);
+	sigset_t block_set;
+	sigset_t old_set;
+	sigemptyset(&block_set);
+	sigaddset(&block_set, SIGALRM);
+	sigprocmask(SIG_BLOCK, &block_set, &old_set);
+}
+
+/**
+ * interrupt_set - 设阻塞信号集为old_set
+ * @old: 要设置的信号集
+ * **/
+void interrupt_set(sigset_t old_set)
+{
+	sigprocmask(SIG_SETMASK, &old_set, NULL);
 }
