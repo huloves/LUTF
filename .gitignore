@@ -45,3 +45,4 @@ dkms.conf
 *.bin
 main
 build/
+*.a

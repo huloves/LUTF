@@ -2,18 +2,24 @@ BUILD_DIR = ./build
 AS = nasm
 CC = gcc
 LD = gcc
+AR = ar
 LIB = -I include/
 ASFLAGS = -f elf64
 CFLAGS = -c -g $(LIB)
 
-OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/assert.o $(BUILD_DIR)/task.o $(BUILD_DIR)/list.o \
+#OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/assert.o $(BUILD_DIR)/task.o $(BUILD_DIR)/list.o \
+		$(BUILD_DIR)/analog_interrupt.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/died_context_swap.o \
+		$(BUILD_DIR)/bitmap.o $(BUILD_DIR)/context_swap.o $(BUILD_DIR)/debug.o $(BUILD_DIR)/sync.o \
+		$(BUILD_DIR)/console.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/init.o
+
+OBJS = $(BUILD_DIR)/assert.o $(BUILD_DIR)/task.o $(BUILD_DIR)/list.o \
 		$(BUILD_DIR)/analog_interrupt.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/died_context_swap.o \
 		$(BUILD_DIR)/bitmap.o $(BUILD_DIR)/context_swap.o $(BUILD_DIR)/debug.o $(BUILD_DIR)/sync.o \
 		$(BUILD_DIR)/console.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/init.o
 
 ###### 编译 ######
-$(BUILD_DIR)/main.o: main.c include/task.h
-	$(CC) $(CFLAGS) $< -o $@
+# $(BUILD_DIR)/main.o: main.c include/task.h
+	# $(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/list.o: lib/list.c include/list.h
 	$(CC) $(CFLAGS) $< -o $@
@@ -67,9 +73,13 @@ $(BUILD_DIR)/died_context_swap.o: task/died_context_swap.asm
 $(BUILD_DIR)/context_swap.o: task/context_swap.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
+###### 生成库文件 ######
+libtask.a: $(OBJS)
+	$(AR) rcs libtask.a $(OBJS)
+
 ###### 链接 ######
-main: $(OBJS)
-	$(LD) $(^) -o $@
+# main: $(OBJS)
+	# $(LD) $(^) -o $@
 
 .PHONY: mk_dir clean all
 
@@ -80,6 +90,6 @@ clean:
 	# rm main && cd $(BUILD_DIR) && rm -f ./*
 	cd $(BUILD_DIR) && rm -rf ./*
 
-build: main
+build: libtask.a
 
 all:mk_dir build
