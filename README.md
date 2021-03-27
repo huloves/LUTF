@@ -13,23 +13,55 @@ TOPIC_ID:4, TEAM_ID:1382578369, TEAM_NAME:Xiyou-LUG.
 1.  git clone https://github.com/Xiyou-LUG/src.git
 2.  cd src/
 3.  mkdir build
+4.  make all
 
 #### 使用说明
 
-1.  初始化任务框架
+初始化任务框架 
 
 init();
 
-2.  创建任务
+创建任务
 
-/**
- * task_start - 创建一个优先级为prio，名字为name的任务
- * @name: 任务名
- * @prio: 任务优先级
- * @func: 任务处理函数
- * @func_arg: 任务参数
- * **/
 struct task_struct* task_start(char* name, int prio, task_func function, void* func_arg);
+
+创建任务示例
+```c
+#include "task.h"
+#include "console.h"
+#include "init.h"
+#include <stdio.h>
+#include <unistd.h>
+
+void test(void* args)
+{
+    while(1) {
+        sleep(1);
+        console_put_str(str);
+    }
+}
+
+void test1(void* args)
+{
+    char* str = args;
+    while(1) {
+        sleep(1);
+        console_put_str(str);
+    }
+}
+
+int main()
+{
+    init();
+    task_start("test", 31, test, "taskA ");
+    task_start("tast1", 31, test1, "taskB ");
+    while(1) {
+        sleep(1);
+        console_put_str("maiN ");
+    }
+    return 0;
+}
+```
 
 #### 参与贡献
 
