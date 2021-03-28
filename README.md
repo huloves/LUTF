@@ -5,7 +5,7 @@ TOPIC_ID:4, TEAM_ID:1382578369, TEAM_NAME:Xiyou-LUG.
 
 #### 项目背景
 
-该题目是实现一个Linux用户态下任务调度框架，原生的Linux是支持多任务的，但是由于是内核统一管理，所以任务的粒度都是内核所固定的。这在一些数据处理相关联的场景下，就需要对任务支持的粒度更加细化，来更好的处理这些任务CPU密集型的任务，避免内核态下任务的频繁切换。所以提出一种Linux用户态下多任务的想法，对比目前的协程的优势和不足，我们打算设计出内嵌在OS中的负责任务调度的小OS。
+该项目是实现一个Linux用户态下抢占式任务调度框架，原生的Linux是支持多任务的，但是由于是内核统一管理，所以任务的粒度都是内核所固定的。这在一些数据处理相关联的场景下，就需要对任务支持的粒度更加细化，来更好的处理这些任务CPU密集型的任务，避免内核态下任务的频繁切换。所以提出一种Linux用户态下多任务的想法，对比目前的协程的优势和不足，我们打算设计出内嵌在OS中的负责任务调度的小OS。
 
 #### 软件架构
 
@@ -19,8 +19,9 @@ TOPIC_ID:4, TEAM_ID:1382578369, TEAM_NAME:Xiyou-LUG.
 
 1.  git clone https://github.com/Xiyou-LUG/src.git
 2.  cd src/
-3.  mkdir build
-4.  make all
+3.  make all
+
+>make all后生成libtask.a库文件，编译程序时在后加上该和-I ./include/库即可。
 
 #### 使用说明
 
@@ -32,21 +33,18 @@ init();
 
 struct task_struct* task_start(char* name, int prio, task_func function, void* func_arg);
 
-创建任务示例
+输出 - 未hook现有的输出函数
+
+详见console.h
+
+创建任务示例 - 创建100w个任务，并执行。
+由于在任务创建函数中将终端屏蔽，即忽略时钟信号，以保证任务就绪链表同步，同时信号处理函数的周期为10ms，所以在创建100w个任务时会消耗较长的时间，稍微等待即可。
 ```c
 #include "task.h"
 #include "console.h"
 #include "init.h"
 #include <stdio.h>
 #include <unistd.h>
-
-void test(void* args)
-{
-    while(1) {
-        sleep(1);
-        console_put_str(str);
-    }
-}
 
 void test1(void* args)
 {
@@ -60,14 +58,21 @@ void test1(void* args)
 int main()
 {
     init();
-    task_start("test", 31, test, "taskA ");
-    task_start("tast1", 31, test1, "taskB ");
+    task_start("tast1", 31, test1, "argB ");
+    for(int i = 0; i < 1000000; i++) {
+        task_start("abc", 31, test1, "a ");
+    }
     while(1) {
         sleep(1);
         console_put_str("maiN ");
     }
     return 0;
 }
+```
+```bash
+工作目录：src/
+编译链接：gcc main.c -o main -I include/ libtask.a
+运行：./main
 ```
 
 #### 参与贡献
