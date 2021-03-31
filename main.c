@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
+void test(void* args)
+{
+    char* str = args;
+    console_put_str(str);
+}
+
 void test1(void* args)
 {
     char* str = args;
@@ -16,7 +22,7 @@ void test1(void* args)
 int main()
 {
     init();
-    task_start("tast1", 31, test1, "argB ");
+    task_start("tast1", 31, test, "argA ");
     for(int i = 0; i < 1000000; i++) {
         task_start("abc", 31, test1, "a ");
     }
